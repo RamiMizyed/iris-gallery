@@ -28,10 +28,17 @@
 body {
 	background: var(--background);
 	color: var(--foreground);
-	font-family: Arial, Helvetica, sans-serif;
+	font-family: "Abordage", sans-serif;
 }
 
 h1 {
 	font-family: "Abordage", sans-serif;
-	@apply text-2xl lg:text-4xl capitalize;
+	@apply text-2xl lg:text-4xl xl:text-6xl capitalize;
+}
+h2 {
+	font-family: "Abordage", sans-serif;
+	@apply text-xl lg:text-2xl capitalize;
+}
+.funkyFont {
+	font-family: "Abordage", sans-serif;
 }

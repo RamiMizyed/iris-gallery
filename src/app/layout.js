@@ -1,9 +1,11 @@
-import { Geist, Abordage } from "next/font/google";
+import { Alegreya_Sans } from "next/font/google";
 import "./globals.css";
+import Nav from "./Components/Nav";
+import LandingGradient from "./Components/LandingGradient";
 
-const geistSans = Geist({
-	variable: "--font-geist-sans",
+const alegreyaSans = Alegreya_Sans({
 	subsets: ["latin"],
+	weight: ["100", "300", "400", "500", "700", "800", "900"],
 });
 
 export const metadata = {
@@ -14,7 +16,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
 	return (
 		<html lang="en">
-			<body className={`${geistSans.variable}  antialiased`}>{children}</body>
+			<body className={`${alegreyaSans.variable} antialiased`}>
+				<Nav />
+
+				{children}
+			</body>
 		</html>
 	);
 }

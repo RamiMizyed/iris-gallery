@@ -34,7 +34,8 @@ export default function AnimatedText({ phrase }) {
 			body.push(
 				<p
 					key={word + "_" + i}
-					style={{ display: "inline-block", marginRight: "8px" }}>
+					className="inline-block mr-2" // Tailwind: inline-block + margin-right: 8px
+				>
 					{letters}
 				</p>
 			);
@@ -51,7 +52,8 @@ export default function AnimatedText({ phrase }) {
 					ref={(el) => {
 						refs.current.push(el);
 					}}
-					style={{ opacity: 0 }}>
+					className="opacity-0 funkyFont" // Tailwind: starting opacity
+				>
 					{letter}
 				</span>
 			);
@@ -60,8 +62,8 @@ export default function AnimatedText({ phrase }) {
 	};
 
 	return (
-		<main ref={container} style={{ overflow: "hidden" }}>
-			<div ref={body} style={{ display: "flex", flexWrap: "wrap" }}>
+		<main ref={container} className="overflow-hidden">
+			<div ref={body} className="flex flex-wrap">
 				{splitWords(phrase)}
 			</div>
 		</main>

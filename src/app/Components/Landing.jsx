@@ -6,15 +6,19 @@ import {
 	AnimatePresence,
 	useMotionValue,
 	useSpring,
+	delay,
 } from "framer-motion";
 import { useRouter } from "next/navigation";
 
 const clipPathVariants = {
-	hidden: { clipPath: "polygon(0 0, 0 0, 0 100%, 0 100%)", opacity: 0 },
-	visible: {
-		clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)",
+	initial: {
+		clipPath: "circle(0% at 50% 50%)",
+		opacity: 0,
+	},
+	animate: {
+		clipPath: "circle(150% at 50% 50%)",
 		opacity: 1,
-		transition: { duration: 1, ease: "easeInOut" },
+		transition: { duration: 1.5, ease: "easeInOut", delay: 0.3 },
 	},
 };
 
@@ -61,21 +65,26 @@ const Landing = () => {
 					animate="animate"
 					exit="exit"
 					variants={screenVariants}
-					className="w-full h-[100svh] relative flex flex-col gap-10 items-center justify-center p-6 max-w-6xl mx-auto ">
+					className="w-full h-[calc(100svh-100px)] relative flex flex-col  items-center justify-center gap-10 py-10  px-6 2xl:px-[20%] mx-auto ">
 					{/* Video with Clip Path Intro Animation */}
-					<motion.video
-						initial="hidden"
-						animate="visible"
-						variants={clipPathVariants}
-						onMouseEnter={() => setHovered(true)}
-						onMouseLeave={() => setHovered(false)}
-						onMouseMove={handleMouseMove}
-						onClick={handleClick}
-						muted
-						autoPlay
-						loop
-						className="w-full max-w-4xl  object-cover rounded-lg cursor-pointer"
-						src="/Video/video-bosque.mov"></motion.video>
+					<div className="w-full h-full flex items-center justify-center relative">
+						<motion.video
+							initial="initial"
+							animate="animate"
+							variants={clipPathVariants}
+							onMouseEnter={() => setHovered(true)}
+							onMouseLeave={() => setHovered(false)}
+							onMouseMove={handleMouseMove}
+							onClick={handleClick}
+							muted
+							autoPlay
+							loop
+							className="w-full h-[65svh]   object-cover rounded-lg cursor-pointer"
+							src="/Video/video-bosque.mov"></motion.video>
+						<h1 className="absolute  text-white text-4xl font-bold pointer-events-none">
+							Explore the myth
+						</h1>
+					</div>
 
 					{/* Card that follows cursor */}
 					<AnimatePresence>
@@ -91,38 +100,30 @@ const Landing = () => {
 									translateX: "-50%",
 									translateY: "-50%",
 								}}
-								className="absolute pointer-events-none text-white text-center w-2/3 h-[50%] p-4 backdrop-blur-2xl bg-gradient-to-br from-white/50 rounded-lg flex flex-col items-center justify-center">
-								<motion.h1
-									variants={cardVariants}
-									initial="hidden"
-									animate="visible"
-									transition={{ duration: 0.8 }}
-									className="text-lg mb-2">
-									You are now under a spell
-								</motion.h1>
-
+								className="absolute pointer-events-none text-white text-center w-1/2 h-[50%] p-4 backdrop-blur-2xl bg-gradient-to-br from-black/50 to-zinc-950/40 rounded-lg flex flex-col items-center justify-center">
 								<motion.h1
 									variants={cardVariants}
 									initial="hidden"
 									animate="visible"
 									transition={{ duration: 0.8, delay: 0.8 }}
 									className="text-sm">
-									Do you want to break the spell? <br /> Then, explore our
-									project.
+									Explore the myth
 								</motion.h1>
 							</motion.div>
 						)}
 					</AnimatePresence>
 
 					{/* Always visible title */}
-					<motion.h1
-						initial={{ opacity: 0, y: 50 }}
-						animate={{ opacity: 1, y: 0 }}
-						transition={{ delay: 2.2, duration: 1 }}
-						className=" text-white text-start text-lg px-4">
-						Silence²
-						<br /> Territorio Abadía Retuerta <br /> Organismo | año uno
-					</motion.h1>
+					<div className="w-full h-fit flex items-center justify-start">
+						<motion.h2
+							initial={{ opacity: 0, y: 50 }}
+							animate={{ opacity: 1, y: 0 }}
+							transition={{ delay: 1.6, duration: 1 }}
+							className=" text-white text-start  px-4">
+							bosque_bosque
+							<br /> Territorio Abadía Retuerta
+						</motion.h2>
+					</div>
 				</motion.div>
 			)}
 		</AnimatePresence>
