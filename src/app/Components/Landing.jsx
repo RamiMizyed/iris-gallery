@@ -82,7 +82,7 @@ const Landing = () => {
 							className="w-full h-[65svh]   object-cover rounded-lg cursor-pointer"
 							src="/Video/video-bosque.mov"></motion.video>
 						<h1 className="absolute  text-white text-4xl font-bold pointer-events-none">
-							Explore the myth
+							the myth
 						</h1>
 					</div>
 
@@ -100,7 +100,7 @@ const Landing = () => {
 									translateX: "-50%",
 									translateY: "-50%",
 								}}
-								className="absolute pointer-events-none text-white text-center w-1/2 h-[50%] p-4 backdrop-blur-2xl bg-gradient-to-br from-black/50 to-zinc-950/40 rounded-lg flex flex-col items-center justify-center">
+								className="absolute pointer-events-none text-white text-center  p-6 backdrop-blur-2xl bg-gradient-to-br from-black/50 to-zinc-950/40 rounded-lg flex flex-col items-center justify-center">
 								<motion.h1
 									variants={cardVariants}
 									initial="hidden"

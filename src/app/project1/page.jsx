@@ -1,8 +1,9 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import React, { useRef, useLayoutEffect, useState, useMemo } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import LinkHoverAnimated from "../Components/LinkHoverAnimation";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -16,8 +17,8 @@ const phrases = [
 	"The monks obeyed. They left the square untouched. Wild things grew, taller and darker than elsewhere, but never beyond its edges. They ringed the place with the leftover stones, safely surrounded, protected. Slowly, the morose Abbey along with its monks and lands began to heal. It thrived again. Each year, the monks renewed their promise, vowing to uphold peace and respect for nature throughout the area. They told the tale of the tree's last breath through the frescoes and carvings on the church walls and on monastery columns. However, the construction of the church was never completed and it remains to this day—half-done, half-ruin—as a witness of what occurred.",
 	"Each San Juan, they would step into the square one by one and make the vow: to protect Abadía Retuerta and its lands. If the vow was broken, the spell returned. Those who trespassed outside of this night were bound to ill-fortune: they would lose control of nature, of their bodies, of their thoughts. Unless they committed themselves to honouring nature's right to non-intervention through sincere actions, their misfortunes would continue and multiply until, the following feast of San Juan, they returned to the square to make this commitment a solemn vow. This tradition carried on for generations. But peace is fragile. During the period in Spain's history known as the Desamortización, the abbey was sold. The sacred land was ploughed by indifferent hands, then sold again to a grain company, which knew not of the warnings. Bankruptcy followed. Then came Novartis, and Abadía Retuerta—who used the land more sparingly. Still, sometimes, someone would step where they should not do. And then the land rebelled: frost in summer, wine turned to vinegar, boiling skies and weeks without rain. Always, only within the Abadía's lands. Local elders remember their grandparents taking part in the San Juan vow. They also told tales of the forest spirits—and of the refuge the monks offered them. Abadía Retuerta and all to follow must now ensure that the rite is kept. Trees alone won’t break the spell. Only memory. Only respectful contemplation. And a promise kept, year after year, to the last spirit of the forest. But... looking at the present and the future to come, it is important to reflect on climate change... Since temperature and weather are changing due to human actions, and the square is being directly affected by this... are we still alive?",
 ];
-
 const videos = [
+	"/Video/MVI_0383.mov",
 	"/Video/MVI_0383.mov",
 	"/Video/MVI_0449.mov",
 	"/Video/video-bosque.mov",
@@ -29,116 +30,101 @@ const videos = [
 ];
 
 export default function Home() {
-	const refs = useRef([]);
-	const container = useRef(null);
-	const videoRefs = useRef([]);
+	const containerRef = useRef(null);
+	const phraseRefs = useRef([]);
+	const [activeIndex, setActiveIndex] = useState(0);
 
-	useEffect(() => {
-		gsap.fromTo(
-			refs.current,
-			{
-				opacity: 0.05,
-				y: 10,
-				filter: "blur(2px)",
-			},
-			{
-				opacity: 1,
-				y: 0,
-				filter: "blur(0px)",
-				ease: "sine.in",
-				stagger: 0.1,
-				scrollTrigger: {
-					trigger: container.current,
-					scrub: 2,
-					start: "top 35%",
-					end: "bottom 100%",
-				},
-			}
-		);
+	// Pre-split text once
+	const splitData = useMemo(
+		() =>
+			phrases.map((phrase) => phrase.split(" ").map((word) => word.split(""))),
+		[]
+	);
 
-		videoRefs.current.forEach((video, index) => {
+	useLayoutEffect(() => {
+		const el = containerRef.current;
+		if (!el) return;
+
+		// Grab all letter spans in one go
+		const letters = el.querySelectorAll(".word span");
+
+		const ctx = gsap.context(() => {
 			gsap.fromTo(
-				video,
+				letters,
+				{ opacity: 0.15, y: 10, filter: "blur(2px)" },
 				{
-					clipPath: "inset(50% 50% 50% 50%)",
-					opacity: 0,
-				},
-				{
-					clipPath: "inset(0% 0% 0% 0%)",
 					opacity: 1,
-					ease: "power2.out",
+					y: 0,
+					filter: "blur(0px)",
+					ease: "power2.inOut",
+					stagger: 0.02,
 					scrollTrigger: {
-						trigger: video,
-						start: "top 80%",
-						end: "bottom 60%",
+						trigger: el,
 						scrub: true,
+						start: "top 50%",
+						end: "bottom 100%",
 					},
 				}
 			);
-		});
+
+			phraseRefs.current.forEach((triggerEl, idx) => {
+				ScrollTrigger.create({
+					trigger: triggerEl,
+					start: "top center",
+					end: "bottom center",
+					onEnter: () => setActiveIndex(idx),
+					onEnterBack: () => setActiveIndex(idx),
+				});
+			});
+		}, el);
+
+		return () => {
+			ctx.revert();
+			ScrollTrigger.getAll().forEach((st) => st.kill());
+		};
 	}, []);
-
-	const splitWords = (phrase) => {
-		let body = [];
-
-		phrase.split(" ").forEach((word, i) => {
-			const letters = splitLetters(word);
-
-			body.push(
-				<p key={word + "_" + i} className="text-[3em] mr-[1.5vw] font-bold m-0">
-					{letters}
-				</p>
-			);
-		});
-
-		return body;
-	};
-
-	const splitLetters = (word) => {
-		let letters = [];
-
-		word.split("").forEach((letter, i) => {
-			letters.push(
-				<span
-					key={letter + "_" + i}
-					ref={(el) => {
-						if (el) refs.current.push(el);
-					}}
-					className="opacity-20 inline-block"
-					style={{ display: "inline-block", opacity: 0 }}>
-					{letter}
-				</span>
-			);
-		});
-
-		return letters;
-	};
 
 	return (
 		<main
-			ref={container}
-			className="w-full min-h-screen text-[rgb(211,211,211)] relative p-6 2xl:px-[20%]">
-			{phrases.map((phrase, index) => (
-				<div key={index} className="mb-16">
-					<div className="w-full flex flex-wrap z-10 mt-[50px]">
-						{splitWords(phrase)}
-					</div>
-					{index !== phrases.length - 1 && (
-						<>
-							<div className="w-full flex items-center justify-center">
-								<video
-									ref={(el) => (videoRefs.current[index] = el)}
-									muted
-									autoPlay
-									loop
-									className="md:w-1/2 my-6 lg:my-10 2xl:my-16"
-									src={videos[index]}></video>
+			ref={containerRef}
+			className="w-full flex flex-col items-center justify-center min-h-screen text-gray-300 p-6">
+			<div className="flex max-w-[1600px] items-start justify-center">
+				<div className="w-full md:w-8/12">
+					{splitData.map((words, pi) => (
+						<div
+							key={pi}
+							className="mb-16"
+							ref={(el) => el && (phraseRefs.current[pi] = el)}>
+							<div className="flex flex-wrap mt-12">
+								{words.map((letters, wi) => (
+									<p key={wi} className="text-[2.5em] mr-6 font-bold m-0 word">
+										{letters.map((ltr, li) => (
+											<span key={li}>{ltr}</span>
+										))}
+									</p>
+								))}
 							</div>
-							<div className="w-full h-[1px] bg-zinc-800 mb-6"></div>
-						</>
-					)}
+						</div>
+					))}
 				</div>
-			))}
+				<aside className="w-4/12  sticky top-20 h-[60vh]  hidden md:flex items-center justify-center mt-12">
+					<div className="relative w-full h-full flex items-center justify-center">
+						{videos.map((src, idx) => (
+							<video
+								key={idx}
+								src={src}
+								autoPlay
+								loop
+								poster="/IMG_0526.jpeg"
+								muted
+								className={`absolute inset-0  h-full object-cover rounded-lg shadow-lg transition-opacity duration-700 ${
+									idx === activeIndex ? "opacity-100" : "opacity-0"
+								}`}
+							/>
+						))}
+					</div>
+				</aside>
+			</div>
 		</main>
 	);
 }
