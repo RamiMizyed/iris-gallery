@@ -1,8 +1,7 @@
 import { Alegreya_Sans } from "next/font/google";
 import "./globals.css";
 import Nav from "./Components/Nav";
-import LandingGradient from "./Components/LandingGradient";
-
+import SmoothScroll from "./Components/SmoothScroll";
 const alegreyaSans = Alegreya_Sans({
 	subsets: ["latin"],
 	weight: ["100", "300", "400", "500", "700", "800", "900"],
@@ -17,9 +16,10 @@ export default function RootLayout({ children }) {
 	return (
 		<html lang="en">
 			<body className={`${alegreyaSans.variable} antialiased`}>
-				<Nav />
-
-				{children}
+				<SmoothScroll>
+					<Nav />
+					{children}
+				</SmoothScroll>
 			</body>
 		</html>
 	);
