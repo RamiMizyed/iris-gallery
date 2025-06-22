@@ -8,6 +8,7 @@ import {
 	useSpring,
 } from "framer-motion";
 import { useRouter } from "next/navigation";
+import TypewriterText from "./TypeWriter";
 
 const clipPathVariants = {
 	initial: {
@@ -81,7 +82,7 @@ const Landing = () => {
 							className="w-full h-[65svh]   object-cover rounded-lg cursor-pointer"
 							src="/Video/video-bosque.mov"></motion.video>
 						<h1 className="absolute  text-white text-4xl font-bold pointer-events-none">
-							the myth
+							<TypewriterText text="the myth" speed={120} />
 						</h1>
 					</div>
 
@@ -106,7 +107,7 @@ const Landing = () => {
 									animate="visible"
 									transition={{ duration: 0.8, delay: 0.8 }}
 									className="text-sm">
-									Explore the myth
+									Explore
 								</motion.h1>
 							</motion.div>
 						)}

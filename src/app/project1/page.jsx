@@ -3,6 +3,7 @@
 import React, { useRef, useLayoutEffect, useState, useMemo } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import ScrollAudioPlayer from "../Components/ScrollAudioPlayer";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -102,14 +103,14 @@ export default function Home() {
 					Loading...
 				</div>
 			)}
-
+			<ScrollAudioPlayer />
 			<div
 				ref={textRef}
 				className={`flex max-w-[1600px] items-start justify-center transition-opacity duration-700 ${
 					isReady ? "opacity-100" : "opacity-0"
 				}`}>
 				{/* Text Section */}
-				<div className="w-full md:w-8/12">
+				<div className="w-full md:w-7/12">
 					{splitData.map((words, pi) => (
 						<div
 							key={pi}
@@ -117,7 +118,9 @@ export default function Home() {
 							ref={(el) => el && (phraseRefs.current[pi] = el)}>
 							<div className="flex flex-wrap mt-12">
 								{words.map((letters, wi) => (
-									<p key={wi} className="text-[2.5em] mr-6 font-bold m-0 word">
+									<p
+										key={wi}
+										className="text-xl lg:text-[2.5vw] mr-6 font-bold m-0 word">
 										{letters.map((ltr, li) => (
 											<span key={li}>{ltr}</span>
 										))}
@@ -129,7 +132,7 @@ export default function Home() {
 				</div>
 
 				{/* Video Section */}
-				<aside className="w-4/12 sticky top-20 h-[60vh] hidden md:flex items-center justify-center mt-12">
+				<aside className="w-5/12 sticky top-20 h-[60vh] hidden md:flex items-center justify-center mt-12">
 					<div className="relative w-full h-full flex items-center justify-center">
 						{videos.map((src, idx) => (
 							<video
